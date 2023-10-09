@@ -60,7 +60,6 @@ class Ventana4 : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Videos() {
-    var text by remember { mutableStateOf("") }
     var value by remember { mutableStateOf("") }
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -90,28 +89,23 @@ fun Videos() {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Column(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.Bottom
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    )
+                    {
+                        Button(
+                            onClick = { },
+                            modifier = Modifier.padding(20.dp),
+                            colors = ButtonDefaults.buttonColors(Color.Red)
+                            ) {
+                            Text(text = "Tomar foto")
+                            }
+                        Button(
+                            onClick = { },
+                            modifier = Modifier.padding(20.dp),
+                            colors = ButtonDefaults.buttonColors(Color.Red)
                         ) {
-                            Button(
-                                onClick = { },
-                                modifier = Modifier
-                                    .padding(10.dp),
-                                colors = ButtonDefaults.buttonColors(Color.Red)
-                            ) {
-                                Text(text = "Guardar")
-                            }
-                            Button(
-                                onClick = { },
-                                modifier = Modifier
-                                    .padding(10.dp),
-                                colors = ButtonDefaults.buttonColors(Color.Red)
-                            ) {
-                                Text(text = "Cancelar")
-                            }
+                            Text(text = "Galeria")
                         }
                     }
                 }
