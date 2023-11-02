@@ -43,7 +43,6 @@ class Ventana1 : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    Greeting("Android")
                     ListaPrincipal()
                 }
             }
@@ -76,7 +75,9 @@ fun ListaPrincipal() {
                 Spacer(modifier = Modifier.height(600.dp))
                 FloatingActionButton(
                     onClick = { },
-                    modifier = Modifier.size(100.dp).padding(10.dp)
+                    modifier = Modifier
+                        .size(100.dp)
+                        .padding(10.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.campana),
