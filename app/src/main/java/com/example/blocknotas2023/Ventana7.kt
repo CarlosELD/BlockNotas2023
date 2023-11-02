@@ -44,7 +44,6 @@ class Ventana7 : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    //Greeting("Android")   coment by Gerardo 
                         GrabandoAudio()
                 }
             }
