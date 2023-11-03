@@ -51,7 +51,6 @@ class Ventana1 : ComponentActivity() {
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ListaPrincipal() {
     Scaffold(
@@ -89,7 +88,7 @@ fun ListaPrincipal() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BarraDeBusqueda() {
     var textoBusqueda by remember { mutableStateOf("") }
