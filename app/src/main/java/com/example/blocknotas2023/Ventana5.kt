@@ -34,7 +34,6 @@ class Ventana5 : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    /*Greeting("Android")*/
                     NotasDescriptivas()
                 }
             }

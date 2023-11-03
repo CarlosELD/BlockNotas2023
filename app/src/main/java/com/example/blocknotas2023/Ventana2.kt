@@ -28,25 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
 
-class Ventana2 : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            BlockNotas2023Theme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    /*Greeting("Android")*/
-                    Notas()
-                }
-            }
-        }
-    }
-}
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Notas() {
     var text by remember { mutableStateOf("") }

@@ -38,7 +38,6 @@ class Ventana6 : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    Greeting("Android")
                     CamaraFotografica()
                 }
             }
