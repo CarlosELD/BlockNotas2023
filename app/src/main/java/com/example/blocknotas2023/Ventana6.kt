@@ -27,28 +27,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
-
-class Ventana6 : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            BlockNotas2023Theme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    CamaraFotografica()
-                }
-            }
-        }
-    }
-}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CamaraFotografica() {
+fun CamaraFotografica(navController: NavController) {
     var value by remember { mutableStateOf("") }
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -104,7 +90,7 @@ fun CamaraFotografica() {
                             Text(text = "Grabar audio")
                         }
                         Button(
-                            onClick = { /* TODO */ },
+                            onClick = { navController.navigate("ListaPrincipal") },
                             modifier = Modifier.padding(20.dp),
                             colors = ButtonDefaults.buttonColors(Color.Red)
                         ) {
@@ -116,7 +102,7 @@ fun CamaraFotografica() {
         }
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun visualization6() {
@@ -124,3 +110,4 @@ fun visualization6() {
         CamaraFotografica()
     }
 }
+*/

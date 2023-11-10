@@ -24,12 +24,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GrabandoAudio() {
+fun GrabandoAudio(navHostController: NavHostController) {
     var value by remember { mutableStateOf("") }
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -80,7 +81,7 @@ fun GrabandoAudio() {
         }
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun visualization7() {
@@ -88,4 +89,4 @@ fun visualization7() {
         GrabandoAudio()
     }
 }
-
+*/

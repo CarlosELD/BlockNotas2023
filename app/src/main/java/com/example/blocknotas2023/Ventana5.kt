@@ -23,28 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
-
-class Ventana5 : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            BlockNotas2023Theme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.onPrimary
-                ) {
-                    NotasDescriptivas()
-                }
-            }
-        }
-    }
-}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NotasDescriptivas() {
+fun NotasDescriptivas(navHostController: NavHostController) {
     var text by remember { mutableStateOf("") }
     var value by remember { mutableStateOf("") }
     Scaffold(
@@ -119,10 +104,4 @@ fun NotasDescriptivas() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun visualization5() {
-    BlockNotas2023Theme {
-        NotasDescriptivas()
-    }
-}
+

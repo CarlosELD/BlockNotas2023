@@ -1,6 +1,5 @@
 package com.example.blocknotas2023.DataBase
 
-import android.provider.ContactsContract
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert

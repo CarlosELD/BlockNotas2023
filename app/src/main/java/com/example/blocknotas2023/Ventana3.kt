@@ -11,10 +11,12 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
 
 @Composable
-fun Controles() {
+fun Controles(navController: NavController) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = colorResource(id = R.color.orange700)
@@ -32,7 +34,7 @@ fun Controles() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 FloatingActionButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("ListaPrincipal") },
                     modifier = Modifier
                         .size(110.dp)
                         .padding(10.dp)
@@ -43,7 +45,7 @@ fun Controles() {
                     )
                 }
                 FloatingActionButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("Videos") },
                     modifier = Modifier
                         .size(110.dp)
                         .padding(10.dp)
@@ -59,7 +61,7 @@ fun Controles() {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 FloatingActionButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("CamaraFotografica") },
                     modifier = Modifier
                         .size(110.dp)
                         .padding(10.dp)
@@ -70,7 +72,7 @@ fun Controles() {
                     )
                 }
                 FloatingActionButton(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("GrabandoAudio") },
                     modifier = Modifier
                         .size(110.dp)
                         .padding(10.dp)
@@ -84,7 +86,7 @@ fun Controles() {
         }
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun visualization3() {
@@ -92,3 +94,4 @@ fun visualization3() {
         Controles()
     }
 }
+*/

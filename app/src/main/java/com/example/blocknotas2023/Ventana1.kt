@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -32,6 +31,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.blocknotas2023.components.BarraDeBusqueda
+import com.example.blocknotas2023.navegation.Navegacion
+
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
 
 class Ventana1 : ComponentActivity() {
@@ -43,16 +50,17 @@ class Ventana1 : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.onPrimary
                 ) {
-                    ListaPrincipal()
+                    Navegacion()
                 }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun ListaPrincipal() {
+fun ListaPrincipal(navController: NavController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -73,7 +81,9 @@ fun ListaPrincipal() {
             ) {
                 Spacer(modifier = Modifier.height(600.dp))
                 FloatingActionButton(
-                    onClick = { },
+                    onClick = {
+                        navController.navigate("Notas")
+                    },
                     modifier = Modifier
                         .size(100.dp)
                         .padding(10.dp)
@@ -88,55 +98,10 @@ fun ListaPrincipal() {
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun BarraDeBusqueda() {
-    var textoBusqueda by remember { mutableStateOf("") }
-    val keyboardController = LocalSoftwareKeyboardController.current
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        BasicTextField(
-            value = textoBusqueda,
-            onValueChange = { newValue ->
-                textoBusqueda = newValue
-            },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    keyboardController?.hide()
-                }
-            ),
-            textStyle = TextStyle(color = Color.Black),
-            modifier = Modifier
-                .weight(1f)
-                .padding(end = 8.dp)
-        )
-        IconButton(
-            onClick = {
-                keyboardController?.hide()
-            },
-            modifier = Modifier.padding(1.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null,
-                tint = Color.Black
-            )
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun visualization1() {
     BlockNotas2023Theme {
-        ListaPrincipal()
+        Navegacion()
     }
 }
-
