@@ -5,18 +5,21 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface DBNotas {
-    @Query("SELECT * FROM Notas")
-    fun getAllNotes(): List<Notas>
+interface DaoNotas {
+    @Query("SELECT * FROM notas")
+    fun getAll(): Flow<List<Notas>>
 
+    @Query("SELECT * FROM notas where id=:id")
+    fun getAll(id:Long): Flow<Notas>
     @Insert
-    fun insert(note: Notas)
-
-    @Update
-    fun update(note: Notas)
+    fun insert(notas: Notas)
 
     @Delete
-    fun delete(note: Notas)
+    fun delete(notas: Notas)
+
+    @Update
+    fun update(notas: Notas)
 }

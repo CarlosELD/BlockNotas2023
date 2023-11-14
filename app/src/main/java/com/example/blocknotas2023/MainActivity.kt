@@ -3,14 +3,15 @@ package com.example.blocknotas2023
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.blocknotas2023.navegation.Navegacion
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
-import com.example.blocknotas2023.visualization1
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    visualization1()
+                    Navegacion()
                 }
             }
         }
@@ -31,6 +32,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun GreetingPreview() {
     BlockNotas2023Theme {
-        visualization1()
+        Navegacion()
     }
 }

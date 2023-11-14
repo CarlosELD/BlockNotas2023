@@ -1,6 +1,5 @@
 package com.example.blocknotas2023
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material3.Button
@@ -22,14 +21,13 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Videos(navController: NavController) {
     var value by remember { mutableStateOf("") }
     Scaffold(
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { padding ->
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = colorResource(id = R.color.orange700)

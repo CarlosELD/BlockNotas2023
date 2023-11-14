@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BarraDeBusqueda() {
-    var textoBusqueda by remember { mutableStateOf("Controles") }
+    var textoBusqueda by remember { mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
     Row(
         modifier = Modifier
