@@ -16,6 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -44,9 +45,7 @@ class Ventana1 : ComponentActivity() {
 fun ListaPrincipal(navController: NavController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = {
-            BarraDeBusqueda()
-        }
+        topBar = { BarraDeBusqueda() }
     ) { padding ->
         Surface(
             modifier = Modifier.fillMaxSize(),

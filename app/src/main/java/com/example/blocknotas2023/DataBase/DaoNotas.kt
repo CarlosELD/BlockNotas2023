@@ -13,7 +13,7 @@ interface DaoNotas {
     fun getAll(): Flow<List<Notas>>
 
     @Query("SELECT * FROM notas where id=:id")
-    fun getAll(id:Long): Flow<Notas>
+    fun getOne(id:Long): Flow<Notas>
     @Insert
     fun insert(notas: Notas)
 
