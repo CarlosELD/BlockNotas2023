@@ -1,14 +1,16 @@
 package com.example.blocknotas2023
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,11 +21,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.blocknotas2023.DataBase.Mgrabadora.graba
+import com.example.blocknotas2023.viewModel.AudioViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GrabandoAudio(navHostController: NavHostController) {
+fun GrabandoAudio(AudioViewModel: AudioViewModel, navController: NavHostController) {
     var value by remember { mutableStateOf("") }
+    val audios by AudioViewModel.allAudios.collectAsState(emptyList())
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { padding ->
@@ -54,7 +59,11 @@ fun GrabandoAudio(navHostController: NavHostController) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Button(
-                            onClick = { /* TODO */ },
+                            onClick = {
+                                val audio = graba(descripcion = value)
+                                AudioViewModel.addAudio(audio)
+                                navController.navigate("ListaPrincipal")
+                            },
                             modifier = Modifier.padding(20.dp),
                             colors = ButtonDefaults.buttonColors(Color.Red)
                         ) {
@@ -69,16 +78,15 @@ fun GrabandoAudio(navHostController: NavHostController) {
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("Audios almacenados:")
+                LazyColumn {
+                    items(audios) { audio ->
+                        Text(text = audio.descripcion)
+                    }
+                }
             }
         }
     }
 }
-/*
-@Preview(showBackground = true)
-@Composable
-fun visualization7() {
-    BlockNotas2023Theme {
-        GrabandoAudio()
-    }
-}
-*/
+

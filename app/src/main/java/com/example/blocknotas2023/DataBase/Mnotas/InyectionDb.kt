@@ -1,4 +1,4 @@
-package com.example.blocknotas2023.DataBase
+package com.example.blocknotas2023.DataBase.Mnotas
 
 import android.content.Context
 import androidx.room.Room

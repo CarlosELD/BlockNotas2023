@@ -11,9 +11,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.blocknotas2023.viewModel.NotasViewModel
 
 @Composable
-fun Controles(navController: NavController) {
+fun Controles(navController: NavController, notasViewModel: NotasViewModel) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = colorResource(id = R.color.orange700)
@@ -83,12 +84,3 @@ fun Controles(navController: NavController) {
         }
     }
 }
-/*
-@Preview(showBackground = true)
-@Composable
-fun visualization3() {
-    BlockNotas2023Theme {
-        Controles()
-    }
-}
-*/

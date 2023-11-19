@@ -1,10 +1,8 @@
 package com.example.blocknotas2023
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,11 +18,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.blocknotas2023.viewModel.VideosViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Videos(navController: NavController) {
+fun Videos(navController: NavController, videosViewModel: VideosViewModel) {
     var value by remember { mutableStateOf("") }
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { padding ->
@@ -55,7 +54,9 @@ fun Videos(navController: NavController) {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Button(
-                            onClick = { /*TODO*/ },
+                            onClick = {
+                                videosViewModel.insertV(title = "", description = "Descripción del video", filePath = "ruta/del/archivo.mp4")
+                            },
                             modifier = Modifier.padding(20.dp),
                             colors = ButtonDefaults.buttonColors(Color.Red)
                         ) {
@@ -75,12 +76,3 @@ fun Videos(navController: NavController) {
     }
 }
 
-/*
-@Preview(showBackground = true)
-@Composable
-fun visualization4() {
-    BlockNotas2023Theme {
-        Videos()
-    }
-}
-*/

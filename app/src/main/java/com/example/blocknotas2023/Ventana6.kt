@@ -2,15 +2,17 @@ package com.example.blocknotas2023
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,11 +24,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.blocknotas2023.DataBase.Mcamara.Foto
+import com.example.blocknotas2023.viewModel.FotosViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CamaraFotografica(navController: NavController) {
+fun CamaraFotografica(navController: NavController, fotosViewModel: FotosViewModel) {
     var value by remember { mutableStateOf("") }
+    val fotos by fotosViewModel.allFotos.collectAsState(emptyList())
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { padding ->
@@ -80,8 +85,13 @@ fun CamaraFotografica(navController: NavController) {
                         ) {
                             Text(text = "Grabar audio")
                         }
+
                         Button(
-                            onClick = { navController.navigate("ListaPrincipal") },
+                            onClick = {
+                                val foto = Foto(descripcion = value, ruta = "ruta_de_la_foto") // Ajusta la ruta según tus necesidades
+                                fotosViewModel.addFoto(foto)
+                                navController.navigate("ListaPrincipal")
+                            },
                             modifier = Modifier.padding(20.dp),
                             colors = ButtonDefaults.buttonColors(Color.Red)
                         ) {
@@ -89,16 +99,16 @@ fun CamaraFotografica(navController: NavController) {
                         }
                     }
                 }
+
+                // Muestra las fotos almacenadas
+                Spacer(modifier = Modifier.height(20.dp))
+                Text("Fotos almacenadas:")
+                LazyColumn {
+                    items(fotos) { foto ->
+                        Text(text = foto.descripcion)
+                    }
+                }
             }
         }
     }
 }
-/*
-@Preview(showBackground = true)
-@Composable
-fun visualization6() {
-    BlockNotas2023Theme {
-        CamaraFotografica()
-    }
-}
-*/

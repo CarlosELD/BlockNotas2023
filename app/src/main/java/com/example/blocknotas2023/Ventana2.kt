@@ -1,17 +1,27 @@
 package com.example.blocknotas2023
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,13 +29,20 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
+import com.example.blocknotas2023.DataBase.Mnotas.Notas
+import com.example.blocknotas2023.viewModel.NotasViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Notas(navController: NavHostController) {
+fun Notas(
+    navController: NavController,
+    viewModel: NotasViewModel,
+    title: String,
+    content: String
+) {
     var text by remember { mutableStateOf("") }
     var value by remember { mutableStateOf("") }
+
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { padding ->
@@ -67,7 +84,15 @@ fun Notas(navController: NavHostController) {
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Button(
-                        onClick = { navController.navigate("ListaPrincipal")},
+                        onClick = {
+                            try {
+                                viewModel.insert(Notas(title = text, content = value))
+                                text = ""
+                                value = ""
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        },
                         modifier = Modifier
                             .padding(10.dp),
                         colors = ButtonDefaults.buttonColors(Color.Red)
@@ -75,7 +100,7 @@ fun Notas(navController: NavHostController) {
                         Text(text = "Guardar")
                     }
                     Button(
-                        onClick = { navController.navigate("ListaPrincipal")},
+                        onClick = { navController.navigate("ListaPrincipal") },
                         modifier = Modifier
                             .padding(10.dp),
                         colors = ButtonDefaults.buttonColors(Color.Red)
@@ -86,7 +111,7 @@ fun Notas(navController: NavHostController) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         FloatingActionButton(
-                            onClick = { navController.navigate("NotasDescriptivas")},
+                            onClick = { navController.navigate("NotasDescriptivas") },
                             modifier = Modifier
                                 .size(55.dp)
                                 .padding(10.dp)
@@ -113,12 +138,3 @@ fun Notas(navController: NavHostController) {
         }
     }
 }
-/*
-@Preview(showBackground = true)
-@Composable
-fun visualization2() {
-    BlockNotas2023Theme {
-        Notas()
-    }
-}
-*/

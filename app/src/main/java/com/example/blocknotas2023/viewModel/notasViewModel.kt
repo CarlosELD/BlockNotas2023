@@ -1,26 +1,53 @@
 package com.example.blocknotas2023.viewModel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.blocknotas2023.DataBase.Notas
-import kotlinx.coroutines.delay
+import androidx.room.Room
+import com.example.blocknotas2023.DataBase.Mnotas.DaoNotas
+import com.example.blocknotas2023.DataBase.Mnotas.Notas
+import com.example.blocknotas2023.DataBase.Mnotas.NotasDataBase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class notasViewModel : ViewModel() {
-    var notas: List<Notas> by mutableStateOf(listOf())
-        private set
+class NotasViewModel(application: Application) : AndroidViewModel(application) {
+    private val db: NotasDataBase = Room.databaseBuilder(
+        application,
+        NotasDataBase::class.java, "notas-db"
+    ).build()
 
-    init {
-        viewModelScope.launch {
-            delay(5000)
-            notas = listOf(
-                Notas(0, "Título 1", "Contenido 1"),
-                Notas(1, "Título 2", "Contenido 2")
-            )
+    private val notaDao: DaoNotas = db.notaDao()
+
+    val allNotes: Flow<List<Notas>> = notaDao.getAll()
+
+    fun insert(nota: Notas) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notaDao.insert(nota)
         }
+    }
+
+    val allNotas: Flow<List<Notas>> = notaDao.getAll()
+    fun update(note: Notas) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notaDao.update(note)
+        }
+    }
+
+    fun delete(note: Notas) {
+        viewModelScope.launch(Dispatchers.IO) {
+            notaDao.delete(note)
+        }
+    }
+
+    fun deleteAll() {
+        viewModelScope.launch(Dispatchers.IO) {
+            notaDao.deleteAll()
+        }
+    }
+
+    suspend fun getNoteById(noteId: Int): Notas? {
+        return notaDao.getNoteById(noteId)
     }
 }
 
