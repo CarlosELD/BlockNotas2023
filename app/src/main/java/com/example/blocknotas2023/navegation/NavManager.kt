@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.blocknotas2023.CamaraFotografica
 import com.example.blocknotas2023.Controles
+import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
 import com.example.blocknotas2023.GrabandoAudio
 import com.example.blocknotas2023.ListaPrincipal
 import com.example.blocknotas2023.Notas
@@ -13,13 +14,13 @@ import com.example.blocknotas2023.NotasDescriptivas
 import com.example.blocknotas2023.Videos
 import com.example.blocknotas2023.viewModel.AudioViewModel
 import com.example.blocknotas2023.viewModel.FotosViewModel
+import com.example.blocknotas2023.viewModel.MensajesViewModel
 import com.example.blocknotas2023.viewModel.NotasDescriptivasViewModel
-import com.example.blocknotas2023.viewModel.NotasViewModel
 import com.example.blocknotas2023.viewModel.VideosViewModel
 
 @Composable
 fun Navegacion(
-    notasViewModel: NotasViewModel,
+    mensajesViewModel: MensajesViewModel,
     videosViewModel: VideosViewModel,
     notasDescriptivasViewModel: NotasDescriptivasViewModel,
     fotosViewModel: FotosViewModel,
@@ -30,21 +31,19 @@ fun Navegacion(
         composable("ListaPrincipal") {
             ListaPrincipal(
                 navController = navController,
-                notasViewModel = notasViewModel
+                mensajesViewModel = mensajesViewModel
             )
         }
         composable("Notas") {
             Notas(
-                title = "Título de la nota",
-                content = "Contenido de la nota",
                 navController = navController,
-                viewModel = notasViewModel
+                viewModel = mensajesViewModel
             )
         }
         composable("Controles") {
             Controles(
                 navController = navController,
-                notasViewModel = notasViewModel
+                notasViewModel = mensajesViewModel
             )
         }
         composable("Videos") {
@@ -75,6 +74,20 @@ fun Navegacion(
                 AudioViewModel = audioViewModel
             )
         }
+        composable("EditarMensaje/{id}") {backStackEntry ->
+            val messageId = backStackEntry.arguments?.getString("id")?.toIntOrNull()
+            if (messageId != null) {
+                val mensajeSeleccionado: Mensajes? = mensajesViewModel.mensajes.firstOrNull { it.id == messageId }
+                navController.navigate("EditarMensaje/${mensajeSeleccionado?.id}") {
+                    launchSingleTop = true
+                }
+            } else {
+                navController.navigate("Error") {
+                    launchSingleTop = true
+                }
+            }
+        }
+
     }
 }
 

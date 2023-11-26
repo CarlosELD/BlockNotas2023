@@ -3,9 +3,10 @@ package com.example.blocknotas2023.DataBase.Mnotas
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "notas")
-data class Notas(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+@Entity(tableName = "mensajes")
+data class Mensajes(
+    @PrimaryKey
+    val id: Int,
     val title: String,
-    val content: String
+    val contenido: String
 )

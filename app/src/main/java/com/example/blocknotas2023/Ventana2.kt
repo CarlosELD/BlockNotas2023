@@ -29,16 +29,16 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.example.blocknotas2023.DataBase.Mnotas.Notas
-import com.example.blocknotas2023.viewModel.NotasViewModel
+import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
+import com.example.blocknotas2023.viewModel.MensajesViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun Notas(
     navController: NavController,
-    viewModel: NotasViewModel,
-    title: String,
-    content: String
+    viewModel: MensajesViewModel
 ) {
     var text by remember { mutableStateOf("") }
     var value by remember { mutableStateOf("") }
@@ -85,12 +85,15 @@ fun Notas(
                 ) {
                     Button(
                         onClick = {
-                            try {
-                                viewModel.insert(Notas(title = text, content = value))
-                                text = ""
-                                value = ""
-                            } catch (e: Exception) {
-                                e.printStackTrace()
+                            viewModel.viewModelScope.launch {
+                                try {
+                                    viewModel.insertar(Mensajes(id = 0, title = text, contenido = value))
+                                    text = ""
+                                    value = ""
+                                    navController.navigate("ListaPrincipal")
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
                         },
                         modifier = Modifier

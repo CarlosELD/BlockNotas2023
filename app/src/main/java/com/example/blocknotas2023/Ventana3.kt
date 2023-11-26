@@ -1,7 +1,14 @@
 package com.example.blocknotas2023
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -11,10 +18,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.blocknotas2023.viewModel.NotasViewModel
+import com.example.blocknotas2023.viewModel.MensajesViewModel
 
 @Composable
-fun Controles(navController: NavController, notasViewModel: NotasViewModel) {
+fun Controles(navController: NavController, notasViewModel: MensajesViewModel) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = colorResource(id = R.color.orange700)

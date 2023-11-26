@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,27 +24,27 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.blocknotas2023.DataBase.Mnotas.Notas
-import com.example.blocknotas2023.DataBase.Mnotas.NotasDataBase
+import com.example.blocknotas2023.DataBase.Mnotas.MensajesDataBase
+import com.example.blocknotas2023.Tarjetas.MensajeItem
 import com.example.blocknotas2023.components.BarraDeBusqueda
 import com.example.blocknotas2023.navegation.Navegacion
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
 import com.example.blocknotas2023.viewModel.AudioViewModel
 import com.example.blocknotas2023.viewModel.FotosViewModel
+import com.example.blocknotas2023.viewModel.MensajesViewModel
 import com.example.blocknotas2023.viewModel.NotasDescriptivasViewModel
-import com.example.blocknotas2023.viewModel.NotasViewModel
 import com.example.blocknotas2023.viewModel.VideosViewModel
-import com.example.blocknotas2023.Tarjetas.NotaCard
+
 class Ventana1 : ComponentActivity() {
-    private lateinit var db: NotasDataBase
-    private val notasViewModel: NotasViewModel by viewModels()
+    private lateinit var db: MensajesDataBase
+    private val notasViewModel: MensajesViewModel by viewModels()
     private val videosViewModel: VideosViewModel by viewModels()
     private val notasDescriptivasViewModel: NotasDescriptivasViewModel by viewModels()
     private val fotosViewModel: FotosViewModel by viewModels()
     private val audioViewModel: AudioViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        db = NotasDataBase.getDatabase(applicationContext)
+        db = MensajesDataBase.getDatabase(applicationContext)
         setContent {
             BlockNotas2023Theme {
                 Surface(
@@ -51,7 +52,7 @@ class Ventana1 : ComponentActivity() {
                     color = MaterialTheme.colorScheme.onPrimary
                 ) {
                     Navegacion(
-                        notasViewModel = notasViewModel,
+                        mensajesViewModel = notasViewModel,
                         videosViewModel = videosViewModel,
                         notasDescriptivasViewModel = notasDescriptivasViewModel,
                         fotosViewModel = fotosViewModel,
@@ -63,7 +64,8 @@ class Ventana1 : ComponentActivity() {
     }
 }
 @Composable
-fun ListaPrincipal(navController: NavController, notasViewModel: NotasViewModel) {
+fun ListaPrincipal(navController: NavController, mensajesViewModel: MensajesViewModel) {
+    val mensajeList = mensajesViewModel.mensajes
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { BarraDeBusqueda() }
@@ -72,23 +74,29 @@ fun ListaPrincipal(navController: NavController, notasViewModel: NotasViewModel)
             modifier = Modifier.fillMaxSize(),
             color = colorResource(id = R.color.orange700)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
             ) {
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                    item {
-                        NotaCard(
-                            nota = Notas(title = "Título de la nota", content = "Contenido de la nota"),
-                            onClick = {
-                                navController.navigate("Notas")
+                    items(mensajeList) { mensaje ->
+                        MensajeItem(
+                            mensaje = mensaje,
+                            onEliminarClick = {
+                                mensajesViewModel.eliminarMensaje(it)
+                            },
+                            onEditarClick = {
+                                try {
+                                    navController.navigate("EditarMensaje/${it.id}")
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
                             }
                         )
                     }
                 }
-                Spacer(modifier = Modifier.height(600.dp))
+                Spacer(modifier = Modifier.height(20.dp))
                 FloatingActionButton(
                     onClick = {
                         navController.navigate("Notas")
@@ -106,4 +114,3 @@ fun ListaPrincipal(navController: NavController, notasViewModel: NotasViewModel)
         }
     }
 }
-

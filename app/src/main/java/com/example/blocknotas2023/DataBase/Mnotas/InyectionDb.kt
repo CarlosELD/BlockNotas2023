@@ -14,17 +14,17 @@ import javax.inject.Singleton
 object InyectionDb {
     @Singleton
     @Provides
-    fun providesDaoNotas(notasDB: NotasDataBase): DaoNotas {
-        return notasDB.notaDao()
+    fun providesDaoNotas(notasDB: MensajesDataBase): DaoMensajes {
+        return notasDB.msgDao()
     }
 
     @Singleton
     @Provides
-    fun proviesNotasDB(@ApplicationContext context: Context): NotasDataBase {
+    fun proviesNotasDB(@ApplicationContext context: Context): MensajesDataBase {
 
         return Room.databaseBuilder(
             context,
-            NotasDataBase::class.java,
+            MensajesDataBase::class.java,
             "Notas"
         ).fallbackToDestructiveMigration().build()
     }
