@@ -75,10 +75,23 @@ fun ListaPrincipal(navController: NavController, mensajesViewModel: MensajesView
             color = colorResource(id = R.color.orange700)
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(20.dp)
+                modifier = Modifier.fillMaxWidth().padding(20.dp)
             ) {
+                Spacer(modifier = Modifier.height(20.dp))
+                FloatingActionButton(
+                    onClick = {
+                        navController.navigate("Notas")
+                    },
+                    modifier = Modifier
+                        .size(70.dp)
+                        .padding(10.dp)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.campana),
+                        contentDescription = null
+                    )
+                }
+                Spacer(modifier = Modifier.height(20.dp))
                 LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(mensajeList) { mensaje ->
                         MensajeItem(
@@ -95,20 +108,6 @@ fun ListaPrincipal(navController: NavController, mensajesViewModel: MensajesView
                             }
                         )
                     }
-                }
-                Spacer(modifier = Modifier.height(20.dp))
-                FloatingActionButton(
-                    onClick = {
-                        navController.navigate("Notas")
-                    },
-                    modifier = Modifier
-                        .size(100.dp)
-                        .padding(10.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.campana),
-                        contentDescription = null
-                    )
                 }
             }
         }

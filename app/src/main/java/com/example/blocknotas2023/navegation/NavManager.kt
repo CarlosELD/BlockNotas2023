@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.blocknotas2023.CamaraFotografica
 import com.example.blocknotas2023.Controles
 import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
+import com.example.blocknotas2023.EditarMensaje
 import com.example.blocknotas2023.GrabandoAudio
 import com.example.blocknotas2023.ListaPrincipal
 import com.example.blocknotas2023.Notas
@@ -74,12 +75,16 @@ fun Navegacion(
                 AudioViewModel = audioViewModel
             )
         }
-        composable("EditarMensaje/{id}") {backStackEntry ->
+        composable("EditarMensaje/{id}") { backStackEntry ->
             val messageId = backStackEntry.arguments?.getString("id")?.toIntOrNull()
             if (messageId != null) {
                 val mensajeSeleccionado: Mensajes? = mensajesViewModel.mensajes.firstOrNull { it.id == messageId }
-                navController.navigate("EditarMensaje/${mensajeSeleccionado?.id}") {
-                    launchSingleTop = true
+                if (mensajeSeleccionado != null) {
+                    EditarMensaje(mensaje = mensajeSeleccionado, mensajesViewModel = mensajesViewModel, navController = navController)
+                } else {
+                    navController.navigate("Error") {
+                        launchSingleTop = true
+                    }
                 }
             } else {
                 navController.navigate("Error") {
@@ -87,7 +92,6 @@ fun Navegacion(
                 }
             }
         }
-
     }
 }
 

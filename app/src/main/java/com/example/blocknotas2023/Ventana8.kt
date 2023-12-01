@@ -3,6 +3,7 @@ package com.example.blocknotas2023
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -12,6 +13,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -20,7 +22,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
@@ -33,15 +39,14 @@ fun EditarMensaje(
     mensajesViewModel: MensajesViewModel,
     navController: NavController
 ) {
-    val mensajeId = navController.previousBackStackEntry?.arguments?.getString("id")
-    val mensajeSeleccionado: Mensajes? = mensajesViewModel.mensajes.firstOrNull { it.id.toString() == mensajeId }
     var nuevoTitulo by remember { mutableStateOf(mensaje.title) }
     var nuevoContenido by remember { mutableStateOf(mensaje.contenido) }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(
-                title = { Text("Editar Mensaje") },
+                title = { Text("Editar Mensaje", color = Color.Black) },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -50,39 +55,41 @@ fun EditarMensaje(
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = colorResource(id = R.color.orange700)
         ) {
-            mensajeSeleccionado?.let { mensaje ->
+            Column(
+                modifier = Modifier.fillMaxSize().padding(padding),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 TextField(
                     value = nuevoTitulo,
                     onValueChange = { nuevoTitulo = it },
-                    label = { Text("Título") },
+                    label = { Text("Título", color = Color.Gray) },
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    textStyle = TextStyle(color = Color.Black),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 TextField(
                     value = nuevoContenido,
                     onValueChange = { nuevoContenido = it },
-                    label = { Text("Contenido") }
+                    label = { Text("Contenido", color = Color.Gray) },
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    textStyle = TextStyle(color = Color.Black),
                 )
-            }
-            Spacer(modifier = Modifier.height(20.dp))
-            Button(
-                onClick = {
-                    // Guardar los cambios en el ViewModel
-                    mensajeSeleccionado?.let {
+                Spacer(modifier = Modifier.height(20.dp))
+                Button(
+                    onClick = {
                         mensajesViewModel.actualizarMensaje(
-                            it.copy(title = nuevoTitulo, contenido = nuevoContenido)
+                            mensaje.copy(title = nuevoTitulo, contenido = nuevoContenido)
                         )
-                    }
-                    // Navegar de nuevo a la lista principal
-                    navController.navigate("ListaPrincipal")
-                },
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text("Guardar cambios")
+                        navController.navigate("ListaPrincipal")
+                    },
+                    modifier = Modifier.padding(16.dp)
+                ) {
+                    Text("Guardar cambios", color = Color.White)
+                }
             }
         }
     }
