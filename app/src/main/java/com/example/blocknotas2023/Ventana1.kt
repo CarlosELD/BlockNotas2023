@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.blocknotas2023.DataBase.Mnotas.MensajesDataBase
 import com.example.blocknotas2023.Tarjetas.MensajeItem
-import com.example.blocknotas2023.components.BarraDeBusqueda
 import com.example.blocknotas2023.navegation.Navegacion
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
 import com.example.blocknotas2023.viewModel.AudioViewModel
@@ -68,7 +66,7 @@ fun ListaPrincipal(navController: NavController, mensajesViewModel: MensajesView
     val mensajeList by mensajesViewModel.mensajes.collectAsState(emptyList())
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { BarraDeBusqueda() }
+        topBar = { }
     ) { padding ->
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -92,7 +90,7 @@ fun ListaPrincipal(navController: NavController, mensajesViewModel: MensajesView
                     )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceAround) {
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
                     items(mensajeList) { mensaje ->
                         MensajeItem(
                             mensaje = mensaje,

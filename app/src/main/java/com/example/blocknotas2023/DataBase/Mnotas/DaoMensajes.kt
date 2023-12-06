@@ -13,9 +13,6 @@ interface DaoMensajes {
     @Query("SELECT * FROM mensajes")
     fun getAll(): Flow<List<Mensajes>>
 
-    @Query("SELECT * FROM mensajes WHERE id = :id")
-    fun getMensajeById(id: Int): Flow<Mensajes>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(mensaje: Mensajes)
 
@@ -24,9 +21,6 @@ interface DaoMensajes {
 
     @Delete
     suspend fun delete(mensaje: Mensajes)
-
-    @Query("DELETE FROM mensajes WHERE id = :id")
-    suspend fun deleteNotaById(id: Int)
 
     @Update
     suspend fun editarMensaje(mensaje: Mensajes)

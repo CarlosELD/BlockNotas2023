@@ -10,10 +10,6 @@ class RepositorioMsg @Inject constructor(private val notasDB: DaoMensajes) {
         notasDB.insert(nota)
     }
 
-    suspend fun editarNota(nota: Mensajes) {
-        notasDB.update(nota)
-    }
-
     suspend fun deleteNota(nota: Mensajes) {
         notasDB.delete(nota)
     }

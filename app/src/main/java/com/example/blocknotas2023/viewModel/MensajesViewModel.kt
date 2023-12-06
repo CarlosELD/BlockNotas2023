@@ -27,11 +27,4 @@ class MensajesViewModel (private val repository: RepositorioMsg) : ViewModel() {
             repository.deleteNota(mensaje)
         }
     }
-
-    fun crearMensaje(title: String, contenido: String) {
-        viewModelScope.launch {
-            val nuevoMensaje = Mensajes(title = title, contenido = contenido)
-            repository.addNota(nuevoMensaje)
-        }
-    }
 }
