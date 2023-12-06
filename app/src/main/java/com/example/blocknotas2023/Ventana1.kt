@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -32,14 +35,12 @@ import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
 import com.example.blocknotas2023.viewModel.AudioViewModel
 import com.example.blocknotas2023.viewModel.FotosViewModel
 import com.example.blocknotas2023.viewModel.MensajesViewModel
-import com.example.blocknotas2023.viewModel.NotasDescriptivasViewModel
 import com.example.blocknotas2023.viewModel.VideosViewModel
 
 class Ventana1 : ComponentActivity() {
     private lateinit var db: MensajesDataBase
     private val notasViewModel: MensajesViewModel by viewModels()
     private val videosViewModel: VideosViewModel by viewModels()
-    private val notasDescriptivasViewModel: NotasDescriptivasViewModel by viewModels()
     private val fotosViewModel: FotosViewModel by viewModels()
     private val audioViewModel: AudioViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +55,6 @@ class Ventana1 : ComponentActivity() {
                     Navegacion(
                         mensajesViewModel = notasViewModel,
                         videosViewModel = videosViewModel,
-                        notasDescriptivasViewModel = notasDescriptivasViewModel,
                         fotosViewModel = fotosViewModel,
                         audioViewModel = audioViewModel
                     )
@@ -65,7 +65,7 @@ class Ventana1 : ComponentActivity() {
 }
 @Composable
 fun ListaPrincipal(navController: NavController, mensajesViewModel: MensajesViewModel) {
-    val mensajeList = mensajesViewModel.mensajes
+    val mensajeList by mensajesViewModel.mensajes.collectAsState(emptyList())
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { BarraDeBusqueda() }
@@ -92,7 +92,7 @@ fun ListaPrincipal(navController: NavController, mensajesViewModel: MensajesView
                     )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                LazyColumn(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.SpaceAround) {
                     items(mensajeList) { mensaje ->
                         MensajeItem(
                             mensaje = mensaje,

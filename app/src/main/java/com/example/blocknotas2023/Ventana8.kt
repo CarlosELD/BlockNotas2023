@@ -41,7 +41,6 @@ fun EditarMensaje(
 ) {
     var nuevoTitulo by remember { mutableStateOf(mensaje.title) }
     var nuevoContenido by remember { mutableStateOf(mensaje.contenido) }
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -81,8 +80,12 @@ fun EditarMensaje(
                 Spacer(modifier = Modifier.height(20.dp))
                 Button(
                     onClick = {
-                        mensajesViewModel.actualizarMensaje(
-                            mensaje.copy(title = nuevoTitulo, contenido = nuevoContenido)
+                        mensajesViewModel.editarMensaje(
+                            Mensajes(
+                                id = mensaje.id,
+                                title = nuevoTitulo,
+                                contenido = nuevoContenido
+                            )
                         )
                         navController.navigate("ListaPrincipal")
                     },

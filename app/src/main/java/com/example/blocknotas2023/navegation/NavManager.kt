@@ -1,6 +1,8 @@
 package com.example.blocknotas2023.navegation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -11,19 +13,16 @@ import com.example.blocknotas2023.EditarMensaje
 import com.example.blocknotas2023.GrabandoAudio
 import com.example.blocknotas2023.ListaPrincipal
 import com.example.blocknotas2023.Notas
-import com.example.blocknotas2023.NotasDescriptivas
 import com.example.blocknotas2023.Videos
 import com.example.blocknotas2023.viewModel.AudioViewModel
 import com.example.blocknotas2023.viewModel.FotosViewModel
 import com.example.blocknotas2023.viewModel.MensajesViewModel
-import com.example.blocknotas2023.viewModel.NotasDescriptivasViewModel
 import com.example.blocknotas2023.viewModel.VideosViewModel
 
 @Composable
 fun Navegacion(
     mensajesViewModel: MensajesViewModel,
     videosViewModel: VideosViewModel,
-    notasDescriptivasViewModel: NotasDescriptivasViewModel,
     fotosViewModel: FotosViewModel,
     audioViewModel: AudioViewModel
 ) {
@@ -53,16 +52,6 @@ fun Navegacion(
                 videosViewModel = videosViewModel
             )
         }
-        composable("NotasDescriptivas") {
-            NotasDescriptivas(
-                "Título de la nota descriptiva",
-                "Contenido de la nota descriptiva",
-                "Fecha de la nota descriptiva",
-                "Hora de la nota descriptiva",
-                navController = navController,
-                NotasDescriptivasViewModel = notasDescriptivasViewModel
-            )
-        }
         composable("CamaraFotografica") {
             CamaraFotografica(
                 navController = navController,
@@ -78,17 +67,10 @@ fun Navegacion(
         composable("EditarMensaje/{id}") { backStackEntry ->
             val messageId = backStackEntry.arguments?.getString("id")?.toIntOrNull()
             if (messageId != null) {
-                val mensajeSeleccionado: Mensajes? = mensajesViewModel.mensajes.firstOrNull { it.id == messageId }
+                val mensajesState by mensajesViewModel.mensajes.collectAsState(initial = emptyList())
+                val mensajeSeleccionado: Mensajes? = mensajesState?.firstOrNull { it.id == messageId }
                 if (mensajeSeleccionado != null) {
                     EditarMensaje(mensaje = mensajeSeleccionado, mensajesViewModel = mensajesViewModel, navController = navController)
-                } else {
-                    navController.navigate("Error") {
-                        launchSingleTop = true
-                    }
-                }
-            } else {
-                navController.navigate("Error") {
-                    launchSingleTop = true
                 }
             }
         }

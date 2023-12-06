@@ -1,33 +1,37 @@
 package com.example.blocknotas2023.viewModel
 
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
+import com.example.blocknotas2023.DataBase.Mnotas.RepositorioMsg
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
-class MensajesViewModel : ViewModel() {
-    private val _mensajes = mutableStateListOf(
-        Mensajes(id = 0, title = "", contenido = "")
-    )
-    val mensajes: SnapshotStateList<Mensajes> = _mensajes
+class MensajesViewModel (private val repository: RepositorioMsg) : ViewModel() {
+    val mensajes: Flow<List<Mensajes>> = repository.allNotas
 
     fun insertar(mensaje: Mensajes) {
-        _mensajes.add(mensaje)
-    }
-    fun editarMensaje(mensajeEditado: Mensajes) {
-        val index = _mensajes.indexOfFirst { it.id == mensajeEditado.id }
-        if (index != -1) {
-            _mensajes[index] = mensajeEditado
+        viewModelScope.launch {
+            repository.addNota(mensaje)
         }
     }
 
-    fun actualizarMensaje(mensaje: Mensajes) {
-        val index = _mensajes.indexOfFirst { it.id == mensaje.id }
-        if (index != -1) {
-            _mensajes[index] = mensaje
+    fun editarMensaje(mensaje: Mensajes) {
+        viewModelScope.launch {
+            repository.editarMensaje(mensaje)
         }
     }
+
     fun eliminarMensaje(mensaje: Mensajes) {
-        _mensajes.remove(mensaje)
+        viewModelScope.launch {
+            repository.deleteNota(mensaje)
+        }
+    }
+
+    fun crearMensaje(title: String, contenido: String) {
+        viewModelScope.launch {
+            val nuevoMensaje = Mensajes(title = title, contenido = contenido)
+            repository.addNota(nuevoMensaje)
+        }
     }
 }

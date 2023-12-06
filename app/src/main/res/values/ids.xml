@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="imgHome" type="id" />
+    <item name="imgMicro" type="id" />
+    <item name="imgVideoCam" type="id" />
+    <item name="imgCam" type="id" />
+    <item name="action_listFotos_to_foto" type="id" />
+    <item name="action_listFotos_to_video" type="id" />
+    <item name="action_listFotos_to_addAudio" type="id" />
+    <item name="action_listFotos_to_listNote" type="id" />
+    <item name="listfotos" type="id" />
+</resources>
