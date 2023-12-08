@@ -1,32 +1,34 @@
 package com.example.blocknotas2023.navegation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.blocknotas2023.CamaraFotografica
+import com.example.blocknotas2023.AudioRecorderButton
 import com.example.blocknotas2023.Controles
 import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
 import com.example.blocknotas2023.EditarMensaje
-import com.example.blocknotas2023.GrabandoAudio
 import com.example.blocknotas2023.ListaPrincipal
 import com.example.blocknotas2023.Notas
-import com.example.blocknotas2023.Videos
+import com.example.blocknotas2023.TomarFoto
 import com.example.blocknotas2023.viewModel.AudioViewModel
-import com.example.blocknotas2023.viewModel.FotosViewModel
+import com.example.blocknotas2023.viewModel.MediaViewModel
 import com.example.blocknotas2023.viewModel.MensajesViewModel
-import com.example.blocknotas2023.viewModel.VideosViewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Navegacion(
     mensajesViewModel: MensajesViewModel,
-    videosViewModel: VideosViewModel,
-    fotosViewModel: FotosViewModel,
+    fotosViewModel: MediaViewModel,
     audioViewModel: AudioViewModel
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
     NavHost(navController = navController, startDestination = "ListaPrincipal") {
         composable("ListaPrincipal") {
             ListaPrincipal(
@@ -46,23 +48,14 @@ fun Navegacion(
                 notasViewModel = mensajesViewModel
             )
         }
-        composable("Videos") {
-            Videos(
+        composable("TomarFoto") {
+            TomarFoto(
                 navController = navController,
-                videosViewModel = videosViewModel
-            )
-        }
-        composable("CamaraFotografica") {
-            CamaraFotografica(
-                navController = navController,
-                fotosViewModel = fotosViewModel
+                mediaViewModel = fotosViewModel
             )
         }
         composable("GrabandoAudio") {
-            GrabandoAudio(
-                navController = navController,
-                AudioViewModel = audioViewModel
-            )
+            AudioRecorderButton(navController = navController)
         }
         composable("EditarMensaje/{id}") { backStackEntry ->
             val messageId = backStackEntry.arguments?.getString("id")?.toIntOrNull()
@@ -76,5 +69,8 @@ fun Navegacion(
         }
     }
 }
+
+
+
 
 

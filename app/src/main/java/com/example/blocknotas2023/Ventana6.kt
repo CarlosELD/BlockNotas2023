@@ -1,19 +1,24 @@
 package com.example.blocknotas2023
 
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,92 +27,81 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.blocknotas2023.DataBase.Mcamara.Foto
-import com.example.blocknotas2023.viewModel.FotosViewModel
+import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
+import com.example.blocknotas2023.viewModel.MensajesViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CamaraFotografica(navController: NavController, fotosViewModel: FotosViewModel) {
-    var value by remember { mutableStateOf("") }
-    val fotos by fotosViewModel.allFotos.collectAsState(emptyList())
-
+fun EditarMensaje(
+    mensaje: Mensajes,
+    mensajesViewModel: MensajesViewModel,
+    navController: NavController
+) {
+    var nuevoTitulo by remember { mutableStateOf(mensaje.title) }
+    var nuevoContenido by remember { mutableStateOf(mensaje.contenido) }
     Scaffold(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            TopAppBar(
+                title = { Text("Editar Mensaje", color = Color.Black)},
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        }
     ) { padding ->
         Surface(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().padding(padding),
             color = colorResource(id = R.color.orange700)
         ) {
-            Column(
+            Box(
                 modifier = Modifier
+                    .fillMaxSize()
                     .padding(16.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                Spacer(modifier = Modifier.padding(40.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    FloatingActionButton(
-                        onClick = { /* TODO */ },
-                        modifier = Modifier
-                            .size(150.dp)
-                            .padding(10.dp)
+                    TextField(
+                        value = nuevoTitulo,
+                        onValueChange = { nuevoTitulo = it },
+                        label = { Text("Título", color = Color.Gray) },
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        textStyle = TextStyle(color = Color.Black),
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TextField(
+                        value = nuevoContenido,
+                        onValueChange = { nuevoContenido = it },
+                        label = { Text("Contenido", color = Color.Gray) },
+                        modifier = Modifier.fillMaxWidth().padding(16.dp),
+                        textStyle = TextStyle(color = Color.Black),
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    Button(
+                        onClick = {
+                            mensajesViewModel.editarMensaje(
+                                Mensajes(
+                                    id = mensaje.id,
+                                    title = nuevoTitulo,
+                                    contenido = nuevoContenido
+                                )
+                            )
+                            navController.navigate("ListaPrincipal")
+                        },
+                        modifier = Modifier.padding(16.dp)
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.campana),
-                            contentDescription = null
-                        )
+                        Text("Guardar cambios", color = Color.White)
                     }
-                }
-                Spacer(modifier = Modifier.height(50.dp))
-                TextField(
-                    label = { Text(text = "Descripción") },
-                    value = value,
-                    modifier = Modifier.fillMaxWidth(),
-                    onValueChange = { value = it },
-                    maxLines = 5
-                )
-                Spacer(modifier = Modifier.height(50.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Button(
-                            onClick = { /* TODO */ },
-                            modifier = Modifier.padding(20.dp),
-                            colors = ButtonDefaults.buttonColors(Color.Red)
-                        ) {
-                            Text(text = "Grabar audio")
-                        }
-
-                        Button(
-                            onClick = {
-                                val foto = Foto(descripcion = value, ruta = "ruta_de_la_foto") // Ajusta la ruta según tus necesidades
-                                fotosViewModel.addFoto(foto)
-                                navController.navigate("ListaPrincipal")
-                            },
-                            modifier = Modifier.padding(20.dp),
-                            colors = ButtonDefaults.buttonColors(Color.Red)
-                        ) {
-                            Text(text = "Guardar")
-                        }
-                    }
-                }
-
-                // Muestra las fotos almacenadas
-                Spacer(modifier = Modifier.height(20.dp))
-                Text("Fotos almacenadas:")
-                LazyColumn {
-                    items(fotos) { foto ->
-                        Text(text = foto.descripcion)
-                    }
+                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
         }

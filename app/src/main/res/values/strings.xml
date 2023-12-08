@@ -1,3 +1,4 @@
 <resources>
     <string name="BlocNotas">BlockNotas2023</string>
+    <string name="record_audio" />
 </resources>

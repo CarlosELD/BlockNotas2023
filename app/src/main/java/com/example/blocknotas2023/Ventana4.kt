@@ -1,78 +1,57 @@
 package com.example.blocknotas2023
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.blocknotas2023.viewModel.VideosViewModel
+import android.app.AlarmManager
+import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.os.SystemClock
+import com.example.blocknotas2023.components.AlarmReceiver
 
-@Composable
-fun Videos(navController: NavController, videosViewModel: VideosViewModel) {
-    var value by remember { mutableStateOf("") }
+class AlarmApp : Application() {
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize()
-    ) { padding ->
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = colorResource(id = R.color.orange700)
-        ) {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
-            ) {
-                Spacer(modifier = Modifier.height(400.dp))
-                TextField(
-                    label = { Text(text = "Descripción") },
-                    value = value,
-                    modifier = Modifier.fillMaxWidth(),
-                    onValueChange = { value = it },
-                    maxLines = 5
-                )
-                Spacer(modifier = Modifier.height(100.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Button(
-                            onClick = {
-                                videosViewModel.insertV(title = "", description = "Descripción del video", filePath = "ruta/del/archivo.mp4")
-                            },
-                            modifier = Modifier.padding(20.dp),
-                            colors = ButtonDefaults.buttonColors(Color.Red)
-                        ) {
-                            Text(text = "Tomar foto")
-                        }
-                        Button(
-                            onClick = { /*TODO*/ },
-                            modifier = Modifier.padding(20.dp),
-                            colors = ButtonDefaults.buttonColors(Color.Red)
-                        ) {
-                            Text(text = "Galeria")
-                        }
-                    }
-                }
-            }
+    companion object {
+        const val ALARM_ACTION = "com.example.blocknotas2023.ALARM_TRIGGERED"
+        const val ALARM_REQUEST_CODE = 123
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        createNotificationChannel()
+
+        // Configura la alarma
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val alarmIntent = Intent(applicationContext, AlarmReceiver::class.java)
+            .setAction(ALARM_ACTION)
+        val pendingIntent = PendingIntent.getBroadcast(
+            applicationContext,
+            ALARM_REQUEST_CODE,
+            alarmIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val triggerTime = SystemClock.elapsedRealtime() + 10 * 1000
+        alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, triggerTime, pendingIntent)
+    }
+
+    private fun createNotificationChannel() {
+        val channelId = "alarm_id"
+        val channelName = "alarm_name"
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_HIGH
+            )
+        } else {
+            TODO("VERSION.SDK_INT < O")
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager.createNotificationChannel(channel)
         }
     }
 }
-

@@ -58,10 +58,29 @@ android {
 }
 
 dependencies {
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
+    implementation ("androidx.room:room-runtime:2.4.0")
+    implementation ("androidx.room:room-ktx:2.4.0")
+    kapt ("androidx.room:room-compiler:2.4.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.33.2-alpha")
+
+    // ExoPlayer
+    implementation("com.google.android.exoplayer:exoplayer:2.15.1")
+
+    // Coil. Para cargar imagenes de manera asyncrona
+    implementation("io.coil-kt:coil-compose:2.5.0")
     implementation ("androidx.work:work-runtime-ktx:2.9.0")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("com.google.firebase:protolite-well-known-types:18.0.0")
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.media3:media3-common:1.2.0")
+    implementation("androidx.media3:media3-ui:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.gms:play-services-cast-framework:21.4.0")
+    implementation("com.google.firebase:firebase-perf-ktx:20.5.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     //noinspection KaptUsageInsteadOfKsp

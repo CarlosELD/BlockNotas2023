@@ -6,6 +6,10 @@ import javax.inject.Inject
 class RepositorioMsg @Inject constructor(private val notasDB: DaoMensajes) {
     val allNotas: Flow<List<Mensajes>> = notasDB.getAll()
 
+    fun BuscarMensajes(searchTerm: String): Flow<List<Mensajes>> {
+        return notasDB.buscarMensajes(searchTerm)
+    }
+
     suspend fun addNota(nota: Mensajes) {
         notasDB.insert(nota)
     }

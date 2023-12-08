@@ -1,5 +1,7 @@
 package com.example.blocknotas2023
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
@@ -22,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -35,6 +37,7 @@ import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
 import com.example.blocknotas2023.viewModel.MensajesViewModel
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Notas(
     navController: NavController,
@@ -78,6 +81,7 @@ fun Notas(
                     onValueChange = { value = it },
                     maxLines = 5
                 )
+
                 Spacer(modifier = Modifier.weight(1f))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -97,44 +101,33 @@ fun Notas(
                             }
                         },
                         modifier = Modifier
+                            .weight(1f)
                             .padding(10.dp),
                         colors = ButtonDefaults.buttonColors(Color.Red)
                     ) {
                         Text(text = "Guardar")
                     }
+                    Spacer(modifier = Modifier.width(8.dp)) // Ajusta el espacio según sea necesario
                     Button(
                         onClick = { navController.navigate("ListaPrincipal") },
                         modifier = Modifier
+                            .weight(1f)
                             .padding(10.dp),
                         colors = ButtonDefaults.buttonColors(Color.Red)
                     ) {
                         Text(text = "Cancelar")
                     }
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
+                    Spacer(modifier = Modifier.width(8.dp)) // Ajusta el espacio según sea necesario
+                    FloatingActionButton(
+                        onClick = { navController.navigate("Controles") },
+                        modifier = Modifier
+                            .size(55.dp)
+                            .padding(10.dp)
                     ) {
-                        FloatingActionButton(
-                            onClick = { navController.navigate("NotasDescriptivas") },
-                            modifier = Modifier
-                                .size(55.dp)
-                                .padding(10.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.campana),
-                                contentDescription = null
-                            )
-                        }
-                        FloatingActionButton(
-                            onClick = { navController.navigate("Controles") },
-                            modifier = Modifier
-                                .size(55.dp)
-                                .padding(10.dp)
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.archivos),
-                                contentDescription = null
-                            )
-                        }
+                        Image(
+                            painter = painterResource(id = R.drawable.archivos),
+                            contentDescription = null
+                        )
                     }
                 }
             }

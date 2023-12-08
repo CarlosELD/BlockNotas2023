@@ -49,24 +49,13 @@ fun Controles(navController: NavController, notasViewModel: MensajesViewModel) {
                         contentDescription = null
                     )
                 }
-                FloatingActionButton(
-                    onClick = { navController.navigate("Videos") },
-                    modifier = Modifier
-                        .size(110.dp)
-                        .padding(10.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.videos),
-                        contentDescription = null
-                    )
-                }
             }
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.fillMaxWidth()
             ) {
                 FloatingActionButton(
-                    onClick = { navController.navigate("CamaraFotografica") },
+                    onClick = { navController.navigate("TomarFoto") },
                     modifier = Modifier
                         .size(110.dp)
                         .padding(10.dp)

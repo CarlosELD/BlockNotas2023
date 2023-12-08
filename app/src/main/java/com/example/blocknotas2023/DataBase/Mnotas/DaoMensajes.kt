@@ -13,6 +13,9 @@ interface DaoMensajes {
     @Query("SELECT * FROM mensajes")
     fun getAll(): Flow<List<Mensajes>>
 
+    @Query("SELECT * FROM mensajes WHERE :searchTerm = '' OR title LIKE '%' || :searchTerm || '%' OR contenido LIKE '%' || :searchTerm || '%'")
+    fun buscarMensajes(searchTerm: String): Flow<List<Mensajes>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(mensaje: Mensajes)
 

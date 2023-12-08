@@ -1,28 +1,40 @@
 package com.example.blocknotas2023.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.blocknotas2023.DataBase.Mcamara.DBFotos
-import com.example.blocknotas2023.DataBase.Mcamara.DaoFotos
-import com.example.blocknotas2023.DataBase.Mcamara.Foto
-import kotlinx.coroutines.flow.Flow
+import com.example.blocknotas2023.DataBase.Mcamara.MediaItem
+import com.example.blocknotas2023.DataBase.Mcamara.MediaRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class FotosViewModel(application: Application) : AndroidViewModel(application) {
+class MediaViewModel(private val repository: MediaRepository) : ViewModel() {
+    private val _mediaItems = MutableStateFlow<List<MediaItem>>(emptyList())
+    val mediaItems: StateFlow<List<MediaItem>> get() = _mediaItems
 
-    private val fotosDao: DaoFotos
-    val allFotos: Flow<List<Foto>>
+    private var currentSearchTerm = ""
 
-    init {
-        val database = DBFotos.getInstance(application.applicationContext)
-        fotosDao = database.fotosDao()
-        allFotos = fotosDao.getAllFotos()
+    fun insertMediaItem(mediaItem: MediaItem) {
+        viewModelScope.launch {
+            repository.insertMediaItem(mediaItem)
+        }
     }
 
-    fun addFoto(foto: Foto) {
+    fun deleteMediaItem(mediaItem: MediaItem) {
         viewModelScope.launch {
-            fotosDao.addFoto(foto)
+            repository.deleteMediaItem(mediaItem)
         }
+    }
+
+    fun searchMediaItems(searchTerm: String) {
+        viewModelScope.launch {
+            repository.searchMediaItems(searchTerm).collect {
+                _mediaItems.value = it
+            }
+        }
+    }
+
+    fun refreshList() {
+        searchMediaItems(currentSearchTerm)
     }
 }
