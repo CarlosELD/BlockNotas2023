@@ -148,7 +148,7 @@ fun TomarFoto(
 }
 
 @Composable
-fun VideoPlayer(videoUri: Uri, modifier: Modifier = Modifier.fillMaxSize()) {
+fun VideoPlayer(videoUri: Uri, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val videoView = remember { VideoView(context) }
     AndroidView(

@@ -17,7 +17,7 @@ interface DaoMensajes {
     fun buscarMensajes(searchTerm: String): Flow<List<Mensajes>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(mensaje: Mensajes)
+    suspend fun insert(mensaje: Mensajes): Long
 
     @Update
     suspend fun update(mensaje: Mensajes)

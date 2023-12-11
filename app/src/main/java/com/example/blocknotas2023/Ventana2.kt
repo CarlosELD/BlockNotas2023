@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -35,7 +36,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
 import com.example.blocknotas2023.viewModel.MensajesViewModel
+import com.example.blocknotas2023.viewModel.establecerAlarmaYNotificacion
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -45,7 +48,10 @@ fun Notas(
 ) {
     var text by remember { mutableStateOf("") }
     var value by remember { mutableStateOf("") }
-
+    var horas by remember { mutableStateOf("") }
+    var minutos by remember { mutableStateOf("") }
+    var segundos by remember { mutableStateOf("") }
+    val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize()
     ) { padding ->
@@ -73,7 +79,7 @@ fun Notas(
                     onValueChange = { text = it },
                     maxLines = 1
                 )
-                Spacer(modifier = Modifier.height(40.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 TextField(
                     label = { Text(text = "Descripción") },
                     value = value,
@@ -81,7 +87,30 @@ fun Notas(
                     onValueChange = { value = it },
                     maxLines = 5
                 )
-
+                Spacer(modifier = Modifier.height(10.dp))
+                TextField(
+                    label = { Text(text = "Horas(24 horas)") },
+                    value = horas,
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { horas = it },
+                    maxLines = 1
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                TextField(
+                    label = { Text(text = "Minutos") },
+                    value = minutos,
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { minutos = it },
+                    maxLines = 1
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                TextField(
+                    label = { Text(text = "Segundos") },
+                    value = segundos,
+                    modifier = Modifier.fillMaxWidth(),
+                    onValueChange = { segundos = it },
+                    maxLines = 1
+                )
                 Spacer(modifier = Modifier.weight(1f))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -107,7 +136,7 @@ fun Notas(
                     ) {
                         Text(text = "Guardar")
                     }
-                    Spacer(modifier = Modifier.width(8.dp)) // Ajusta el espacio según sea necesario
+                    Spacer(modifier = Modifier.width(8.dp))
                     Button(
                         onClick = { navController.navigate("ListaPrincipal") },
                         modifier = Modifier
@@ -117,7 +146,31 @@ fun Notas(
                     ) {
                         Text(text = "Cancelar")
                     }
-                    Spacer(modifier = Modifier.width(8.dp)) // Ajusta el espacio según sea necesario
+                    Button(
+                        onClick = {
+                            val calendar = Calendar.getInstance()
+                            calendar.set(Calendar.HOUR_OF_DAY, horas.toInt())
+                            calendar.set(Calendar.MINUTE, minutos.toInt())
+                            calendar.set(Calendar.SECOND, segundos.toInt())
+                            val alarmTime = calendar.timeInMillis
+                            viewModel.insertarConAlarma(
+                                Mensajes(id = 0, title = text, contenido = value),
+                                alarmTime,
+                                context = context
+                            )
+                            establecerAlarmaYNotificacion(0, text, context)
+                            text = ""
+                            value = ""
+                            navController.navigate("ListaPrincipal")
+                        },
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(10.dp),
+                        colors = ButtonDefaults.buttonColors(Color.Red)
+                    ) {
+                        Text(text = "Guardar con Alarma")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
                     FloatingActionButton(
                         onClick = { navController.navigate("Controles") },
                         modifier = Modifier

@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -16,7 +15,6 @@ import com.example.blocknotas2023.DataBase.Mnotas.MensajesDataBase
 import com.example.blocknotas2023.DataBase.Mnotas.RepositorioMsg
 import com.example.blocknotas2023.navegation.Navegacion
 import com.example.blocknotas2023.ui.theme.BlockNotas2023Theme
-import com.example.blocknotas2023.viewModel.AudioViewModel
 import com.example.blocknotas2023.viewModel.MediaViewModel
 import com.example.blocknotas2023.viewModel.MensajesViewModel
 
@@ -25,7 +23,6 @@ class MainActivity : ComponentActivity() {
     private lateinit var db1: MediaDatabase
     lateinit var notasViewModel: MensajesViewModel
     lateinit var fotosViewModel: MediaViewModel
-    private val audioViewModel: AudioViewModel by viewModels()
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +42,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Navegacion(
                             mensajesViewModel = notasViewModel,
-                            fotosViewModel = fotosViewModel,
-                            audioViewModel = audioViewModel
+                            fotosViewModel = fotosViewModel
                         )
                     }
                 }

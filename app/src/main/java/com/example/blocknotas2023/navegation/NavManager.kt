@@ -16,7 +16,6 @@ import com.example.blocknotas2023.EditarMensaje
 import com.example.blocknotas2023.ListaPrincipal
 import com.example.blocknotas2023.Notas
 import com.example.blocknotas2023.TomarFoto
-import com.example.blocknotas2023.viewModel.AudioViewModel
 import com.example.blocknotas2023.viewModel.MediaViewModel
 import com.example.blocknotas2023.viewModel.MensajesViewModel
 
@@ -24,8 +23,7 @@ import com.example.blocknotas2023.viewModel.MensajesViewModel
 @Composable
 fun Navegacion(
     mensajesViewModel: MensajesViewModel,
-    fotosViewModel: MediaViewModel,
-    audioViewModel: AudioViewModel
+    fotosViewModel: MediaViewModel
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current

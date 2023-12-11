@@ -1,109 +1,144 @@
 package com.example.blocknotas2023
 
-import androidx.compose.foundation.layout.Box
+import android.Manifest
+import android.media.MediaPlayer
+import android.media.MediaRecorder
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.example.blocknotas2023.DataBase.Mnotas.Mensajes
-import com.example.blocknotas2023.viewModel.MensajesViewModel
+import androidx.navigation.NavHostController
+import java.io.File
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EditarMensaje(
-    mensaje: Mensajes,
-    mensajesViewModel: MensajesViewModel,
-    navController: NavController
-) {
-    var nuevoTitulo by remember { mutableStateOf(mensaje.title) }
-    var nuevoContenido by remember { mutableStateOf(mensaje.contenido) }
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(
-                title = { Text("Editar Mensaje", color = Color.Black)},
-                navigationIcon = {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
-            )
+fun AudioRecorderButton(navController: NavHostController) {
+    val context = LocalContext.current
+    var isRecording by remember { mutableStateOf(false) }
+    var hasPermission by remember { mutableStateOf(false) }
+    var isPlaying by remember { mutableStateOf(false) }
+    val mediaRecorder = remember { MediaRecorder() }
+    val mediaPlayer = MediaPlayer()
+
+    var audioFiles by remember { mutableStateOf(listOf<File>()) }
+
+    val getNextAudioFile: () -> File = {
+        File(context.externalCacheDir, "audio_recording_${audioFiles.size + 1}.3gp")
+    }
+
+    val startRecording = {
+        val audioFile = getNextAudioFile()
+        Log.d("AudioRecorder", "Intentando iniciar la grabación")
+        try {
+            mediaRecorder.apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                setOutputFile(audioFile.absolutePath)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+                prepare()
+                start()
+            }
+            isRecording = true
+            audioFiles = audioFiles + audioFile
+            Log.d("AudioRecorder", "Grabación iniciada")
+        } catch (e: Exception) {
+            Log.e("AudioRecorder", "Error al iniciar la grabación", e)
         }
-    ) { padding ->
-        Surface(
-            modifier = Modifier.fillMaxSize().padding(padding),
-            color = colorResource(id = R.color.orange700)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    TextField(
-                        value = nuevoTitulo,
-                        onValueChange = { nuevoTitulo = it },
-                        label = { Text("Título", color = Color.Gray) },
-                        modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        textStyle = TextStyle(color = Color.Black),
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    TextField(
-                        value = nuevoContenido,
-                        onValueChange = { nuevoContenido = it },
-                        label = { Text("Contenido", color = Color.Gray) },
-                        modifier = Modifier.fillMaxWidth().padding(16.dp),
-                        textStyle = TextStyle(color = Color.Black),
-                    )
-                    Spacer(modifier = Modifier.height(20.dp))
-                    Button(
-                        onClick = {
-                            mensajesViewModel.editarMensaje(
-                                Mensajes(
-                                    id = mensaje.id,
-                                    title = nuevoTitulo,
-                                    contenido = nuevoContenido
-                                )
-                            )
-                            navController.navigate("ListaPrincipal")
-                        },
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text("Guardar cambios", color = Color.White)
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
+    }
+
+    val stopRecording = {
+        Log.d("AudioRecorder", "Intentando detener la grabación")
+        try {
+            mediaRecorder.apply {
+                stop()
+                reset()
+            }
+            isRecording = false
+            Log.d("AudioRecorder", "Grabación detenida")
+        } catch (e: Exception) {
+            Log.e("AudioRecorder", "Error al detener la grabación", e)
+        }
+    }
+
+    val startPlaying = { audioFile: File ->
+        try {
+            mediaPlayer.apply {
+                reset()
+                setDataSource(audioFile.absolutePath)
+                prepare()
+                start()
+                isPlaying = true
+            }
+            mediaPlayer.setOnCompletionListener {
+                isPlaying = false
+            }
+        } catch (e: Exception) {
+            Log.e("AudioRecorder", "Error al reproducir el audio", e)
+        }
+    }
+
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        hasPermission = isGranted
+        if (isGranted && !isRecording) {
+            startRecording()
+        }
+    }
+
+    Column {
+        IconButton(onClick = {
+            if (hasPermission) {
+                if (isRecording) stopRecording() else startRecording()
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+            }
+        }) {
+            if (isRecording) {
+                Icon(Icons.Filled.AccountBox, contentDescription = "Detener Grabación", tint = Color.Red)
+            } else {
+                Icon(Icons.Filled.PlayArrow, contentDescription = "Iniciar Grabación", tint = Color.Black)
+            }
+        }
+
+        audioFiles.forEachIndexed { index, audioFile ->
+            Row(modifier = Modifier.padding(vertical = 4.dp)) {
+                Button(onClick = { startPlaying(audioFile) }) {
+                    Text("Audio ${index + 1}")
+                }
+                IconButton(onClick = {
+                    audioFiles = audioFiles.filter { it != audioFile }
+                }) {
+                    Icon(Icons.Filled.Delete, contentDescription = "Eliminar Audio", tint = Color.Red)
                 }
             }
         }
     }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            mediaPlayer.release()
+            mediaRecorder.release()
+        }
+    }
 }
+
